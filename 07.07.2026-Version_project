@@ -1,0 +1,105 @@
+// Good morning tomorrow me. Your turn to divide this poor test subject into reusable functions where possible
+
+// had to import my ability to take user input
+import java.util.Scanner;
+import java.util.InputMismatchException;
+
+// One scanner for all inputs
+Scanner input = new Scanner(System.in);
+
+void main() {
+
+    System.out.print("Please enter your name: ");
+    String name_read = input.nextLine();
+
+    // Age
+    int age_read = 0;
+    boolean validInput = false;
+
+    while (!validInput) {
+        System.out.print("Please enter your age: ");
+        try {
+            age_read = input.nextInt();
+            input.nextLine();
+            validInput = true;
+        } catch (InputMismatchException e) {
+            System.out.println("Error: Please enter a valid number only.");
+            input.next();
+        }
+    }
+
+    if (age_read <= 0) {
+        System.out.println("Mate, I think you're too young to be using this device");
+
+        validInput = false;
+
+        while (!validInput) {
+            System.out.print("Please enter your real age:");
+            try {
+                age_read = input.nextInt();
+                input.nextLine();
+                if (age_read > 0){
+                    validInput = true;
+                }
+            } catch (InputMismatchException e) {
+                System.out.println("Not again, mate");
+                input.next();
+            }
+        }
+    }
+
+    // Programming Language section
+    System.out.print("Please enter your favorite programming language: ");
+    String language_read = input.nextLine();
+
+    // Jokeful mental health reminder for the user
+    if ((language_read.equals("Malbolge")) || (language_read.equals("malbolge"))) {
+        System.out.println("Don't. Get some help");
+    }
+
+    // Experience section
+    // Error handling for the experience section
+    int experience_read = 0; // start this out at 0
+    validInput = false; // Make sure this starts as false
+
+    // Cannot be made into a soulless repeat function as every part of my code shall be unique
+    while (!validInput) {
+        System.out.print("How much experience do you have in the field? (in years)");
+        try {
+            experience_read = input.nextInt();
+            input.nextLine();
+            if ((experience_read >= 0) && (experience_read < age_read)) { // Make sure the Experience in years is not below 0 or more than users age
+                validInput = true;
+            }
+            else {
+                System.out.println("U sure, bro?");
+            }
+        } catch (InputMismatchException e) {
+            System.out.println("Please enter a real whole number");
+            input.next();
+        }
+    }
+
+    System.out.println("\n--- Profile ---");
+    System.out.println("Name: " + name_read);
+    System.out.println("Age: " + age_read);
+    System.out.println("Favorite Programming Language: " + language_read);
+    System.out.println("Experience: " + experience_read);
+    System.out.println("\nStatus: ");
+
+    if (experience_read == 0) {
+        System.out.println("Beginner");
+    }
+    else if((experience_read > 0) && (experience_read < 4)) {
+        System.out.println("Learning");
+    }
+    else if (experience_read >= 4) {
+        System.out.println("Veteran");
+    }
+    //
+    else {
+        System.out.println("fym?");
+    }
+
+    input.close();
+}
