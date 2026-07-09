@@ -1,18 +1,33 @@
-// Good morning tomorrow me. Your turn to divide this poor test subject into reusable functions where possible
+package Project_one;// had to import my ability to take user input
 
-// had to import my ability to take user input
 import java.util.Scanner;
 import java.util.InputMismatchException;
 
+// Project_one.Main class, I don't know what for yet but why not
 public class Main {
-    // One scanner for all inputs
-    Scanner input = new Scanner(System.in);
 
-    void main() {
+    Programmer user = new Programmer();
 
+    // Functions / Methods
+    void output(Programmer user){
+
+        System.out.println("\n--- Profile ---");
+        System.out.println("Name: " + user.name);
+        System.out.println("Age: " + user.age);
+        System.out.println("Favorite Programming Language: " + user.language);
+        System.out.println("Experience: " + user.experience);
+        System.out.println("\nStatus: ");
+    }
+
+    // Gotta make the function String instead of void because Java need double reasurement
+    String getName(){
         System.out.print("Please enter your name: ");
-        String name_read = input.nextLine();
 
+        // Need to make sure the function actually returns something instead of swallowing my variable
+        return input.nextLine();
+    }
+
+    int getAge(){
         // Age
         int age_read = 0;
         boolean validInput = false;
@@ -49,23 +64,34 @@ public class Main {
             }
         }
 
+
+        return age_read;
+    }
+
+
+    String getLanguage(){
         // Programming Language section
         System.out.print("Please enter your favorite programming language: ");
         String language_read = input.nextLine();
 
         // Jokeful mental health reminder for the user
-        if ((language_read.equals("Malbolge")) || (language_read.equals("malbolge"))) {
+        if (language_read.equalsIgnoreCase("Malbolge")){
             System.out.println("Don't. Get some help");
         }
 
+        return language_read;
+    }
+
+    int getExperience(int age_read){
         // Experience section
         // Error handling for the experience section
         int experience_read = 0; // start this out at 0
-        validInput = false; // Make sure this starts as false
+        // Temporary reassure Java that validInput starts out as false before I make that into a separate function too
+        boolean validInput = false;
 
         // Cannot be made into a soulless repeat function as every part of my code shall be unique
         while (!validInput) {
-            System.out.print("How much experience do you have in the field? (in years)");
+            System.out.print("How much experience do you have in the field? (in years): ");
             try {
                 experience_read = input.nextInt();
                 input.nextLine();
@@ -80,14 +106,10 @@ public class Main {
             }
         }
 
-        // Output section
-        System.out.println("\n--- Profile ---");
-        System.out.println("Name: " + name_read);
-        System.out.println("Age: " + age_read);
-        System.out.println("Favorite Programming Language: " + language_read);
-        System.out.println("Experience: " + experience_read);
-        System.out.println("\nStatus: ");
+        return experience_read;
+    }
 
+    void status(int experience_read){
         if (experience_read == 0) {
             System.out.println("Beginner");
         } else if ((experience_read > 0) && (experience_read < 4)) {
@@ -95,10 +117,34 @@ public class Main {
         } else if (experience_read >= 4) {
             System.out.println("Veteran");
         }
-        //
         else {
             System.out.println("fym?");
         }
+    }
+
+    // One scanner for all inputs
+    Scanner input = new Scanner(System.in);
+
+    void main() {
+        // Name Input function
+        // Save the user input in the same variable for later use
+        //String name_read = getName();
+        user.name = getName();
+
+        // Input function to get Age
+        user.age = getAge();
+
+        // Input function for language
+        user.language = getLanguage();
+
+        // Input function for experience
+        user.experience = getExperience(user.age);
+
+        // Got replaced by a function. (Or a method how the Java people call it)
+        output(user);
+
+        // Method to output the status
+        status(user.experience);
 
         input.close();
     }
