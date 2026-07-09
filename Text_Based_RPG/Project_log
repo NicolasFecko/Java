@@ -1,0 +1,15 @@
+09/07/2026
+- Beginning of the project
+- Player.java class
+- RAM.java class
+- Added Colors
+- Added the base functions as well as the first tutorial battle
+
+
+
+
+To-do:
+- Healing function
+- Continue the story and add a new enemy to fight
+- Add a strength feature
+    - Upon defeating every enemy the player gains to a strength attribute which will allow him to deal more damage
