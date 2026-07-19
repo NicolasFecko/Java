@@ -36,6 +36,9 @@ public class Player {
     int hacking;
     int charisma;
 
+    // Implementing time and game progress
+    int day;
+    int hour;
 
     // Constructor automatically assigns values upon object creation
     public Player(){
@@ -73,6 +76,9 @@ public class Player {
         driving = 0; // No driver's license yet
         firearms = 0; // No arms license yet
         hacking = 0; // This thing actually ain't as easy as movies make it look
+
+        day = 1;
+        hour = 8; // Starting the game at 08:00
 
     }
 
