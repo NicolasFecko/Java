@@ -114,9 +114,11 @@ public class Main {
 
     static void gym(){
         // For later
+        // You increase your stats, but it costs energy and also have to pay entry fee
     }
 
     static void bank(Player player){
+        passTime(player, 1);
         System.out.println("\n" +WHITE_BACKGROUND + "-------------------------------------------------" + RESET + "\n");
         System.out.println("Welcome to the bank!");
         while (true) {
