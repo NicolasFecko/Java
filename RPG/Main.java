@@ -20,10 +20,9 @@ public class Main {
             System.out.print("Try entering an actual amount: ");
         }
         return input.nextInt();
-    }
+    } // End of getValidInt
 
     static void passTime(Player player, int hours){
-
         player.hour += hours;
 
         while (player.hour >= 24) {
@@ -81,6 +80,8 @@ public class Main {
                             5. Job Office
                             6. Casino
                             7. Restaurant
+                            8. Corporate Office
+                            9. Construction site
                             
                             0. Return
                             """);
@@ -92,7 +93,7 @@ public class Main {
             switch (cityChoice){
                 case "1" -> bank(player);
                 case "2" -> System.out.println("Supermarket");
-                case "3" -> gym();
+                case "3" -> gym(player);
                 case "4" -> {
                     // Post office case
                     if (player.hour >= 7 && player.hour <= 18){
@@ -105,6 +106,8 @@ public class Main {
                 case "5" -> System.out.println("Welcome to the Job Office!");
                 case "6" -> System.out.println("Welcome to the casino!");
                 case "7" -> restaurant(player);
+                case "8" -> corporateOffice(player);
+                case "9" -> constructionSite(player);
 
                 //...
                 case "0" -> {
@@ -119,6 +122,72 @@ public class Main {
             } // End of loop
 
         } // End of cityNavigation
+
+    static void constructionSite(Player player){
+        while (true){
+            System.out.println("\n" +WHITE_BACKGROUND + "-------------------------------------------------" + RESET + "\n");
+            System.out.println("\n-- Construction site --");
+            System.out.println("""
+                                1. Work
+                                0. Exit""");
+            System.out.print("Your Choice: ");
+            String constructionChoice = input.nextLine().trim();
+
+            switch (constructionChoice){
+                case "1" -> {
+                    // First I need to check if the player actually works there
+                    if ("Construction worker".equals(player.currentJob)){ // This way I avoid the program crashing if the player id unemployed
+                        startWorkShift(player);
+                    }
+                    else {
+                        System.out.println("I am sorry, you don't work here.");
+                    }
+                } // End of case 1
+                case "0" -> {
+                    return;
+                }
+                default -> {
+                    System.out.println("Invalid input! Please try again..");
+                    continue;
+                }
+
+            }
+
+        }
+    } // End of constructionSite
+
+    static void corporateOffice(Player player){
+        while (true){
+            System.out.println("\n" +WHITE_BACKGROUND + "-------------------------------------------------" + RESET + "\n");
+            System.out.println("\n-- Corporate Office --");
+            System.out.println("""
+                                1. Work
+                                0. Exit""");
+            System.out.print("Your Choice: ");
+            String constructionChoice = input.nextLine().trim();
+
+            switch (constructionChoice){
+                case "1" -> {
+                    // First I need to check if the player actually works there
+                    if ("Secretary".equals(player.currentJob)){ // This way I avoid the program crashing if the player id unemployed
+                        startWorkShift(player);
+                    }
+                    else {
+                        System.out.println("I am sorry, you don't work here.");
+                    }
+                } // End of case 1
+                case "0" -> {
+                    return;
+                }
+                default -> {
+                    System.out.println("Invalid input! Please try again..");
+                    continue;
+                }
+
+            }
+
+        }
+    } // End of corporateOffice
 
     static void restaurant(Player player){
         passTime(player, 1); // Pass time by an hour for travel to the establishment
@@ -188,8 +257,9 @@ public class Main {
 
             switch (postOfficeChoice){
                 case "1" -> {
-                    makePurchase(player, 2); // Deduct $2 for the newspaper
-                    buyNewspaper(player);
+                    if (makePurchase(player, 2)){ // deduct $2 for the newspaper
+                        buyNewspaper(player);
+                    }
                 }
                 case "2" -> System.out.println("Idk yet, bro");
 
@@ -236,7 +306,7 @@ public class Main {
         }
     } // End of buyNewspaper
 
-    static void makePurchase(Player player, int price){
+    static boolean makePurchase(Player player, int price){
         while (true) {
             System.out.println("\n1. Cash or 2. card?");
             System.out.print("Your Choice: ");
@@ -244,12 +314,10 @@ public class Main {
 
             switch (purchaseChoice){
                 case "1" -> {
-                    cashPayment(player, price);
-                    return;
+                    return cashPayment(player, price);
                 }
                 case "2" ->{
-                    cardPayment(player, price);
-                    return;
+                    return cardPayment(player, price);
                 }
 
                 default -> {
@@ -260,55 +328,88 @@ public class Main {
         }
     } // End of makePurchase
 
-    static void cardPayment(Player player, int price){
+    static boolean cardPayment(Player player, int price){
         if (player.bankBalance < price){
             System.out.println("Card declined");
-            return;
+            return false;
         }
         else {
             player.bankBalance -= price;
             System.out.println("Transaction successful");
-            return;
+            return true;
         }
     }
 
-    static void cashPayment(Player player, int price){
+    static boolean cashPayment(Player player, int price){
         if (player.cash < price){
             System.out.println("Not enough money to make this purchase");
-            return;
+            return false;
         }
         else {
             player.cash -= price;
-            return;
+            return true;
         }
     }
 
     static void newsJob(Player player,int newsJob){
         if (newsJob == 1){
-            System.out.println("Congratulations, you got the job as a Waiter!\nYour starting salary will be $4/hour");
-            player.salaryPerHour = 4; // Set players hourly rate to $4
-            player.currentJob = "Waiter"; // Make sure to always remind the player of their employment status
-            player.workShift = 6;
+            if (haveJob(player)) {
+                System.out.println("You must quit your other job first");
+            }
+            else {
+                System.out.println("Congratulations, you got the job as a Waiter!\nYour starting salary will be $4/hour");
+                player.salaryPerHour = 4; // Set players hourly rate to $4
+                player.currentJob = "Waiter"; // Make sure to always remind the player of their employment status
+                player.workShift = 6;
+            }
         }
         else if (newsJob == 2){
-            System.out.println("Congratulations, you got the job as a Secretary!\nYour starting salary will be $4/hour");
-            player.salaryPerHour = 5; // Set players hourly rate to $4
-            player.currentJob = "Secretary"; // Make sure to always remind the player of their employment status
-            player.workShift = 8;
+            if (haveJob(player)) {
+                System.out.println("You must quit your other job first");
+            }
+            else {
+                System.out.println("Congratulations, you got the job as a Secretary!\nYour starting salary will be $4/hour");
+                player.salaryPerHour = 5; // Set players hourly rate to $4
+                player.currentJob = "Secretary"; // Make sure to always remind the player of their employment status
+                player.workShift = 8;
+            }
         }
         else if (newsJob == 3){
-            System.out.println("Congratulations, you got the job as a Construction worker!\nYour starting salary will be $4/hour");
-            player.salaryPerHour = 5; // Set players hourly rate to $4
-            player.currentJob = "Construction worker"; // Make sure to always remind the player of their employment status
-            player.workShift = 10;
+            if (haveJob(player)) {
+                System.out.println("You must quit your other job first");
+            }
+            else {
+                System.out.println("Congratulations, you got the job as a Construction worker!\nYour starting salary will be $4/hour");
+                player.salaryPerHour = 5; // Set players hourly rate to $4
+                player.currentJob = "Construction worker"; // Make sure to always remind the player of their employment status
+                player.workShift = 10;
+            }
         }
     } // end of newsJob
 
+    static boolean haveJob(Player player){
+        if (!player.currentJob.equals("Unemployed")){
+            return true; // If you're not employed then you have a job resulting in True... It's obvious but my dumbahh had to double take
+        }
+        else {
+            return false;
+        }
+    } // End of haveJob()
 
-
-    static void gym(){
+    static void gym(Player player){
         // For later
         // You increase your stats, but it costs energy and also have to pay entry fee
+
+        if (!makePurchase(player, 6)){ // gym fee of $6
+            System.out.println("You couldn't afford today's gym session.");
+            return;
+        }
+
+        System.out.println("Welcome to the gym!");
+
+        // Workout menu...
+
+
     }
 
     static void bank(Player player){
@@ -367,6 +468,10 @@ public class Main {
                 System.out.println("I am sorry but you don't have enough cash to make this transaction. \nYou have only $" + player.cash);
                 continue;
             }
+
+            if (depositAmount < 0){
+                System.out.println("You can't withdraw a negative number..");
+            }
             player.bankBalance += depositAmount;
             player.cash -= depositAmount;
             System.out.println("Transaction successful, have a nice day!");
@@ -394,6 +499,7 @@ public class Main {
         System.out.println("\nEducation reached: " + player.educationReached);
 
         System.out.println("\nCurrent job: " + player.currentJob);
+        System.out.println("Current hourly rate: $" + player.salaryPerHour);
 
         System.out.println("\nStrength: " +player.strength);
         System.out.println("Intelligence: " + player.intelligence);
@@ -440,6 +546,45 @@ public class Main {
         // Also I should add a cooldown for sleep... Later
     }
 
+    static void jobScreen(Player player){
+        while (true) {
+            System.out.println(WHITE_BACKGROUND + "-------------------------------------------------" + RESET);
+            System.out.println("--- Job Screen ---");
+
+            System.out.println("Current job: " + player.currentJob);
+            System.out.println("Hourly rate: $" + player.salaryPerHour);
+
+            System.out.println("""
+                                1. Quit job
+                                0. Exit""");
+            System.out.print("Your Choice: ");
+            String jobScreenChoice = input.nextLine().trim();
+
+            switch (jobScreenChoice){
+                case "1" -> unemployinzation(player);
+                case "0" -> {
+                    return;
+                }
+                default -> {
+                    System.out.println("Invalid input! Try again..");
+                    continue;
+                }
+            }
+        }
+    } // End of jobScreen
+
+    // I can use this above for quiting your job and later getting fired (so real and relatable)
+    static void unemployinzation(Player player){ // hear me out, this is peak method naming
+        if (haveJob(player)) {
+            player.currentJob = "Unemployed";
+            player.salaryPerHour = 0;
+            player.workShift = 0;
+        }
+        else {
+            System.out.println("You already don't have a job");
+        }
+    }
+
     static void gameMenu(Player player) throws InterruptedException { // In the parameters pass the player object from the Player class for later use inside the method
 
         while (true) {
@@ -463,8 +608,9 @@ public class Main {
                     2. Explore the city
                     3. Inventory
                     4. Sleep
-                    5. Save game
-                    6. Exit game
+                    5. Job Screen
+                    6. Save game
+                    7. Exit game
                     """
             );
             System.out.print("Your choice: ");
@@ -474,15 +620,16 @@ public class Main {
                 case "1" -> checkStats(player);
                 case "2" -> {
                     cityNavigation(player);
-                    //passTime(player, 1);
+                    passTime(player, 1);
                 }
                 case "3" -> playerInventory();
                 case "4" -> {
                     System.out.println("Going to sleep...");
                     sleep(player);
                 }
-                case "5" -> System.out.println("Saving...");
-                case "6" -> System.exit(0);
+                case "5" -> jobScreen(player);
+                case "6" -> System.out.println("Saving...");
+                case "7" -> System.exit(0);
 
                 default -> {
                     System.out.println("Invalid input!\n Try again");
