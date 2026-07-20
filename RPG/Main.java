@@ -11,10 +11,6 @@ public class Main {
 
     // Color codes to be used later for a better UI
     static String RESET = "\u001B[0m";
-    String GREEN = "\u001B[32m";
-    String RED = "\u001B[31m";
-    static String WHITE = "\u001B[37m";
-
     static String WHITE_BACKGROUND = "\u001B[47m";
 
     public static int getValidInt(Scanner input) {
@@ -29,7 +25,6 @@ public class Main {
     static void passTime(Player player, int hours){
 
         player.hour += hours;
-
 
         while (player.hour >= 24) {
             player.hour -= 24;
@@ -85,6 +80,7 @@ public class Main {
                             4. Post Office
                             5. Job Office
                             6. Casino
+                            7. Restaurant
                             
                             0. Return
                             """);
@@ -97,6 +93,19 @@ public class Main {
                 case "1" -> bank(player);
                 case "2" -> System.out.println("Supermarket");
                 case "3" -> gym();
+                case "4" -> {
+                    // Post office case
+                    if (player.hour >= 7 && player.hour <= 18){
+                        postOffice(player);
+                    }
+                    else {
+                        System.out.println("The Post office is closed. Work hours are from 7:00 to 18:00");
+                    }
+                } // End of case 4
+                case "5" -> System.out.println("Welcome to the Job Office!");
+                case "6" -> System.out.println("Welcome to the casino!");
+                case "7" -> restaurant(player);
+
                 //...
                 case "0" -> {
                     TimeUnit.SECONDS.sleep(1);
@@ -110,6 +119,139 @@ public class Main {
             } // End of loop
 
         } // End of cityNavigation
+
+    static void restaurant(Player player){
+        System.out.println("\n" +WHITE_BACKGROUND + "-------------------------------------------------" + RESET + "\n");
+
+        while (true) {
+            System.out.println("Welcome to the restaurant!");
+            System.out.println("""
+                    1. Order
+                    2. Begin Work shift
+                    0. Exit""");
+
+            System.out.print("Your choice: ");
+            String restaurantChoice = input.nextLine().trim();
+
+            switch (restaurantChoice){
+                case "1" -> order(player);
+                case "2" -> {
+                    // First I need to check if the player actually works there
+                    if ("Waiter".equals(player.currentJob)){ // This way I avoid the program crashing if the player id unemployed
+                        startWorkShift(player);
+                    }
+                    else {
+                        System.out.println("I am sorry, you don't work here.");
+                    }
+                } // End of case 2
+
+                case "0" -> {
+                    return;
+                }
+                default -> {
+                    System.out.println("Invalid input! Please try again..");
+                    continue;
+                }
+            }
+        }
+    } // End of restaurant
+
+    static void startWorkShift(Player player){
+            // In order to start the work shift I need to move time according to his job and deposit money.
+        System.out.println("\n\nWorking...");
+        player.hour += player.workShift; // Move the time
+        player.bankBalance += (player.salaryPerHour * player.workShift); // Deposit money to the player for his work
+
+    }
+
+    static void order(Player player){
+        // later when I add a hunger and thirst Function
+    }
+
+
+    static void postOffice(Player player){
+        // I am thinking you enter the post office, buy a newspaper and there you see some job offers that you can react to
+        // The post office also needs work hours so you can't just stroll in there at midnight
+
+        // Let's say work hours from 7:00 - 18:00
+        while (true) {
+            System.out.println("\n" +WHITE_BACKGROUND + "-------------------------------------------------" + RESET);
+            System.out.println("Welcome to the post office, what would you like?");
+            System.out.println("""
+                    1. Buy a newspaper
+                    2. Idk yet, for later updates
+                    0. Exit""");
+
+            System.out.print("Your choice: ");
+            String postOfficeChoice = input.nextLine().trim();
+
+            switch (postOfficeChoice){
+                case "1" -> buyNewspaper(player);
+                case "2" -> System.out.println("Idk yet, bro");
+
+                case "0" -> {
+                    return;
+                }
+
+                default -> {
+                    System.out.println("Invalid Input. Please try again..");
+                    continue;
+                }
+            }
+        }
+    }
+
+    static void buyNewspaper(Player player){
+        while (true) {
+            System.out.println("\n" + WHITE_BACKGROUND + "-------------------------------------------------" + RESET);
+            System.out.println("\n--- City Newspaper --- \nJob listings: \n");
+
+            System.out.println("1. Waiter: \nSalary: $4/hour\nShift: 6 hours\n");
+            System.out.println("2. Secretary: \nSalary: $5/hour\nShift: 8 hours\n");
+            System.out.println("3. Construction: \nSalary: $5/hour\nShift: 10 hours\n");
+            System.out.println("0. Exit");
+
+            System.out.print("Your Choice: ");
+            String newsPaperChoice = input.nextLine().trim();
+
+            switch (newsPaperChoice){
+                case "1" -> newsJob(player,1);
+                case "2" -> newsJob(player, 2);
+                case "3" -> newsJob(player, 3);
+
+                case "0" -> {
+                    return;
+                }
+
+                default -> {
+                    System.out.println("Invalid Input. Please try again..");
+                    continue;
+                }
+            }
+        }
+    } // End of buyNewspaper
+
+    static void newsJob(Player player,int newsJob){
+        if (newsJob == 1){
+            System.out.println("Congratulations, you got the job as a Waiter!\nYour starting salary will be $4/hour");
+            player.salaryPerHour = 4; // Set players hourly rate to $4
+            player.currentJob = "Waiter"; // Make sure to always remind the player of their employment status
+            player.workShift = 6;
+        }
+        else if (newsJob == 2){
+            System.out.println("Congratulations, you got the job as a Secretary!\nYour starting salary will be $4/hour");
+            player.salaryPerHour = 5; // Set players hourly rate to $4
+            player.currentJob = "Secretary"; // Make sure to always remind the player of their employment status
+            player.workShift = 8;
+        }
+        else if (newsJob == 3){
+            System.out.println("Congratulations, you got the job as a Construction worker!\nYour starting salary will be $4/hour");
+            player.salaryPerHour = 5; // Set players hourly rate to $4
+            player.currentJob = "Construction worker"; // Make sure to always remind the player of their employment status
+            player.workShift = 10;
+        }
+    } // end of newsJob
+
 
 
     static void gym(){
@@ -151,6 +293,11 @@ public class Main {
                     System.out.println("I am sorry but you don't have enough money in the bank.\nYou currently have: " + player.bankBalance);
                     continue;
                 }
+
+                if (withdrawAmount < 0){
+                    System.out.println("You can't withdraw a negative number..");
+                }
+                
                 player.cash += withdrawAmount;
                 player.bankBalance -= withdrawAmount;
                 System.out.println("Here's you cash.");
