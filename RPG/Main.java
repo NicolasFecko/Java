@@ -121,6 +121,7 @@ public class Main {
         } // End of cityNavigation
 
     static void restaurant(Player player){
+        passTime(player, 1); // Pass time by an hour for travel to the establishment
         System.out.println("\n" +WHITE_BACKGROUND + "-------------------------------------------------" + RESET + "\n");
 
         while (true) {
@@ -159,9 +160,9 @@ public class Main {
     static void startWorkShift(Player player){
             // In order to start the work shift I need to move time according to his job and deposit money.
         System.out.println("\n\nWorking...");
-        player.hour += player.workShift; // Move the time
+        passTime(player, player.workShift);
         player.bankBalance += (player.salaryPerHour * player.workShift); // Deposit money to the player for his work
-
+        System.out.println("Work shift finished!\n It is currently: " + player.hour + ":00\nYou earned: $" + (player.salaryPerHour * player.workShift));
     }
 
     static void order(Player player){
@@ -186,7 +187,10 @@ public class Main {
             String postOfficeChoice = input.nextLine().trim();
 
             switch (postOfficeChoice){
-                case "1" -> buyNewspaper(player);
+                case "1" -> {
+                    makePurchase(player, 2); // Deduct $2 for the newspaper
+                    buyNewspaper(player);
+                }
                 case "2" -> System.out.println("Idk yet, bro");
 
                 case "0" -> {
@@ -199,6 +203,7 @@ public class Main {
                 }
             }
         }
+
     }
 
     static void buyNewspaper(Player player){
@@ -230,6 +235,53 @@ public class Main {
             }
         }
     } // End of buyNewspaper
+
+    static void makePurchase(Player player, int price){
+        while (true) {
+            System.out.println("\n1. Cash or 2. card?");
+            System.out.print("Your Choice: ");
+            String purchaseChoice = input.nextLine().trim();
+
+            switch (purchaseChoice){
+                case "1" -> {
+                    cashPayment(player, price);
+                    return;
+                }
+                case "2" ->{
+                    cardPayment(player, price);
+                    return;
+                }
+
+                default -> {
+                    System.out.println("Invalid Input. Please try again..");
+                    continue;
+                }
+            }
+        }
+    } // End of makePurchase
+
+    static void cardPayment(Player player, int price){
+        if (player.bankBalance < price){
+            System.out.println("Card declined");
+            return;
+        }
+        else {
+            player.bankBalance -= price;
+            System.out.println("Transaction successful");
+            return;
+        }
+    }
+
+    static void cashPayment(Player player, int price){
+        if (player.cash < price){
+            System.out.println("Not enough money to make this purchase");
+            return;
+        }
+        else {
+            player.cash -= price;
+            return;
+        }
+    }
 
     static void newsJob(Player player,int newsJob){
         if (newsJob == 1){
@@ -297,7 +349,7 @@ public class Main {
                 if (withdrawAmount < 0){
                     System.out.println("You can't withdraw a negative number..");
                 }
-                
+
                 player.cash += withdrawAmount;
                 player.bankBalance -= withdrawAmount;
                 System.out.println("Here's you cash.");
@@ -422,7 +474,7 @@ public class Main {
                 case "1" -> checkStats(player);
                 case "2" -> {
                     cityNavigation(player);
-                    passTime(player, 1);
+                    //passTime(player, 1);
                 }
                 case "3" -> playerInventory();
                 case "4" -> {
