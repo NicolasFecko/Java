@@ -25,7 +25,8 @@ public class Player {
     String educationReached;
     int academyPoint;
     String currentJob;
-    int salaryRange;
+    int salaryPerHour;
+    int workShift;
 
 
     // Skill stats
@@ -66,7 +67,8 @@ public class Player {
         */
 
         currentJob = "Unemployed"; // I'll probably change how this feature works later
-        salaryRange = 0; // With this teh code will determine the importance / salary amount of the job with an integer
+        salaryPerHour = 0; // With this teh code will determine the importance / salary amount of the job with an integer
+        workShift = 0;
 
         // Skills
         strength = 1;
