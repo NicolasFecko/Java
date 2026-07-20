@@ -408,6 +408,9 @@ public class Main {
         System.out.println("Welcome to the gym!");
 
         // Workout menu...
+        player.strength += 3;
+        player.charisma += 1;
+        player.energy -= 40; // Gym is demanding
 
 
     }
@@ -451,10 +454,12 @@ public class Main {
                     System.out.println("You can't withdraw a negative number..");
                 }
 
-                player.cash += withdrawAmount;
-                player.bankBalance -= withdrawAmount;
-                System.out.println("Here's you cash.");
-                break;
+                else {
+                    player.cash += withdrawAmount;
+                    player.bankBalance -= withdrawAmount;
+                    System.out.println("Here's you cash.");
+                    break;
+                }
             }
     } // End of Withdraw
 
@@ -561,7 +566,7 @@ public class Main {
             String jobScreenChoice = input.nextLine().trim();
 
             switch (jobScreenChoice){
-                case "1" -> unemployinzation(player);
+                case "1" -> unemployization(player);
                 case "0" -> {
                     return;
                 }
@@ -574,7 +579,7 @@ public class Main {
     } // End of jobScreen
 
     // I can use this above for quiting your job and later getting fired (so real and relatable)
-    static void unemployinzation(Player player){ // hear me out, this is peak method naming
+    static void unemployization(Player player){ // hear me out, this is peak method naming
         if (haveJob(player)) {
             player.currentJob = "Unemployed";
             player.salaryPerHour = 0;
