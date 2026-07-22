@@ -24,6 +24,19 @@ public class Main {
 
     static void passTime(Player player, int hours){
         player.hour += hours;
+        // Make the player hungry when hours pass
+        int hungerCalc = (10 * hours);
+        player.hunger -= hungerCalc;
+        int thirstCalc = (15 * hours); // My idea was that the player looses 20 thirst points in one hour, so I made this to calculate how many hours passed
+        player.thirst -= thirstCalc;
+
+        if (player.thirst < 0){
+            player.thirst = 0; // Makes sure we can't go below 0
+        }
+        if (player.hunger < 0){
+            player.hunger = 0; // I know there'll be a later problem where the variable could exceed the maximum of 100 but that's a later problem
+        }
+
 
         while (player.hour >= 24) {
             player.hour -= 24;
@@ -396,7 +409,7 @@ public class Main {
         }
     } // End of haveJob()
 
-    static void gym(Player player){
+    static void gym(Player player) throws InterruptedException {
         // For later
         // You increase your stats, but it costs energy and also have to pay entry fee
 
@@ -405,13 +418,18 @@ public class Main {
             return;
         }
 
+        System.out.println("\n" +WHITE_BACKGROUND + "-------------------------------------------------" + RESET + "\n");
         System.out.println("Welcome to the gym!");
+
+        System.out.println("Workout in progress...");
+        TimeUnit.SECONDS.sleep(1); // Gotta add a little delay to make it look better
 
         // Workout menu...
         player.strength += 3;
         player.charisma += 1;
         player.energy -= 40; // Gym is demanding
 
+        System.out.println("Workout's over your current strength is: " + player.strength + "\nCharisma: " + player.charisma + "\nEnergy: " + player.energy);
 
     }
 
