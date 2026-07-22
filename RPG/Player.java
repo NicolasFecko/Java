@@ -41,6 +41,11 @@ public class Player {
     int day;
     int hour;
 
+    // Time to implement a new feature that'll players lives a lot more painful
+    int hunger; // Minimum would be 0 signaling starving up to 100, meaning full
+    int thirst; // Same here
+
+
     // Constructor automatically assigns values upon object creation
     public Player(){
         age = 18; // The game will start the user off at 18 years old
@@ -82,6 +87,8 @@ public class Player {
         day = 1;
         hour = 8; // Starting the game at 08:00
 
+        hunger = 80; // Not full, neither starving
+        thirst = 60; // To support the incoming RedBull feature
     }
 
 }
