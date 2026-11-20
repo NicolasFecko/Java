@@ -39,6 +39,7 @@ public class ATM {
                     System.out.print("How much do you want to take out: ");
                     vyber = input.nextFloat();
                     zostatok -= vyber;
+
                 }
                 break;
 
@@ -48,6 +49,8 @@ public class ATM {
             }
         }
         while(volba!=4);
+
+        input.close();
     }
 
 }
